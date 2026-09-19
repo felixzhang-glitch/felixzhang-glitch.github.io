@@ -3,6 +3,7 @@ layout: post
 title: "百炼推理档位校勘：同一参数的五种口径"
 date: 2026-09-19
 categories: ai llm
+tags: reasoning llm api
 ---
 
 `reasoning_effort` 看起来是一个参数，实际是五套互不兼容的白名单。同一句 `"reasoning_effort": "high"`，在百炼的 Qwen 上会被映射成 `xhigh`，在 DeepSeek 上原样生效，在 GLM-5.3 上报错——取决于你调用的是哪个模型。

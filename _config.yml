@@ -8,3 +8,15 @@ kramdown:
   input: GFM
   hard_wrap: false
   syntax_highlighter: rouge
+
+# 分页：GitHub Pages 默认启用 jekyll-paginate，无需在 plugins 中声明
+paginate: 1
+paginate_path: "/page:num/"
+
+# 首页列表显示摘要
+show_excerpts: true
+
+# 页头导航（按路径匹配 site.pages）
+header_pages:
+  - tags.html
+  - categories.html

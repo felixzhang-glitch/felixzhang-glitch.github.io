@@ -3,6 +3,7 @@ layout: post
 title: "为 Agent 注入时间感知：Hook 机制实现"
 date: 2026-07-19
 categories: ai agent
+tags: agent harness
 ---
 
 **本文采用 Hook 机制为 Agent 注入时间感知能力**，实现方式为 UserPromptSubmit 事件 Hook + 全局规则声明，Shell 脚本共 23 行。Agent 的时间感知问题指的是：模型权重是静态的，训练数据有截止日期，推理时没有内置时钟，它的时间停在上一次预训练那天。一周前的会话今天接着聊，对用户来说过了一周，对 AI 来说时间没有流动。目前不少 Agent 框架通过系统提示词注入时间，本文介绍一种基于 Hook 的通用实现，详细介绍如下。

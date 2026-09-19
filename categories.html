@@ -1,0 +1,28 @@
+---
+layout: page
+title: 分类
+permalink: /categories/
+---
+
+{%- assign terms = site.categories | sort -%}
+
+{%- if terms.size > 0 -%}
+<ul class="term-list">
+  {%- for term in terms -%}
+  <li>
+    <span class="term-name">{{ term[0] }}</span>
+    <span class="term-count">{{ term[1].size }}</span>
+    <ul class="term-posts">
+      {%- for post in term[1] -%}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </li>
+  {%- endfor -%}
+</ul>
+{%- else -%}
+<p>暂无分类。</p>
+{%- endif -%}

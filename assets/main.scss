@@ -1,0 +1,85 @@
+---
+---
+
+@import "minima";
+
+/* ---------- 分页 ---------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: $spacing-unit;
+  padding-top: $spacing-unit * 0.5;
+  border-top: 1px solid $grey-color-light;
+  font-size: 14px;
+}
+
+.pagination-item {
+  color: $grey-color-dark;
+}
+
+a.pagination-item {
+  color: $brand-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.pagination-item.is-disabled {
+  color: $grey-color-light;
+}
+
+.pagination-count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 首页摘要 ---------- */
+.post-list > li > p {
+  margin-bottom: 0;
+  color: $grey-color-dark;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ---------- 标签 / 分类归档 ---------- */
+.term-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.term-list > li {
+  margin-bottom: $spacing-unit * 0.75;
+}
+
+.term-name {
+  font-weight: 600;
+}
+
+.term-count {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: $grey-color-light;
+  color: $grey-color-dark;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.term-posts {
+  list-style: none;
+  margin: 6px 0 0 0;
+  padding-left: 14px;
+  border-left: 2px solid $grey-color-light;
+}
+
+.term-posts li {
+  margin-bottom: 2px;
+}
+
+.term-posts .post-meta {
+  font-size: 12px;
+}

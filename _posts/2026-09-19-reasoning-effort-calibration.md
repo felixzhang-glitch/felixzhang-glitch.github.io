@@ -6,7 +6,7 @@ categories: ai llm
 tags: reasoning llm api
 ---
 
-`reasoning_effort` 看起来是一个参数，实际是五套互不兼容的白名单。同一句 `"reasoning_effort": "high"`，在百炼的 Qwen 上会被映射成 `xhigh`，在 DeepSeek 上原样生效，在 GLM-5.3 上报错——取决于你调用的是哪个模型。
+`reasoning_effort` 看起来是一个参数，实际是五套互不兼容的白名单。同一句 `"reasoning_effort": "max"`，在百炼的 qwen3.8 上会被映射成 `xhigh`，在 deepseek-v4-pro 上原样生效，在 glm-5.1 上直接报错，在 deepseek-v4.1-flash 上连参数形态都不匹配——取决于你调用的是哪个模型。
 
 本文以百炼官方文档（2026-09 版）为准，逐模型校勘档位、默认值与越界映射，并给出各家厂商把"思考"从开关做成旋钮的演进时间线。文末附对初稿的 6 处勘误。
 

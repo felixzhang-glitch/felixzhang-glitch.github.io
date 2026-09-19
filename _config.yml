@@ -9,7 +9,11 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
-# 分页：GitHub Pages 默认启用 jekyll-paginate，无需在 plugins 中声明
+# 分页：GitHub Pages 只是把 jekyll-paginate 放进了白名单，仍需在此显式声明才会生效
+# 未声明时 paginator 为 nil，_layouts/home.html 会回退到 site.posts，分页静默失效
+plugins:
+  - jekyll-paginate
+
 paginate: 6
 paginate_path: "/page:num/"
 

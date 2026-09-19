@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "百炼推理档位校勘：同一参数的五种口径（修订版）"
-date: 2026-09-19 18:00:00 +0800
+date: 2026-09-19 06:00:00 +0000
 categories: ai llm
 tags: reasoning llm api
 slug: reasoning-effort-calibration-v2

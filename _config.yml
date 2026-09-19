@@ -10,7 +10,7 @@ kramdown:
   syntax_highlighter: rouge
 
 # 分页：GitHub Pages 默认启用 jekyll-paginate，无需在 plugins 中声明
-paginate: 1
+paginate: 6
 paginate_path: "/page:num/"
 
 # 首页列表显示摘要

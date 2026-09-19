@@ -1,3 +1,10 @@
 title: Blog
+description: 工程笔记与模型观察
+author: felixzhang-glitch
 markdown: kramdown
 theme: minima
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge

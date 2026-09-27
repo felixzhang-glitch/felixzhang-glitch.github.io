@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NOTE-FORMAT：basic-memory 的笔记格式"
+title: "NOTE-FORMAT：basic-memory"
 date: 2026-09-27
 categories: knowledge markdown
 tags: basic-memory knowledge-base mcp picoschema
@@ -40,7 +40,7 @@ tags: [startups, essays, lisp]
 - authored [[Hackers and Painters]]
 ```
 
-`## Observations`、`## Relations` 是惯例，删掉不影响解析。
+`## Observations`、`## Relations` 可删, 不影响解析
 
 ## 对比
 
@@ -52,7 +52,7 @@ tags: [startups, essays, lisp]
 | 校验 | 无 | 可挂 schema 检查字段 |
 | 代价 | 零 | 逐行写前缀 |
 
-差异在机器能否读懂一行。纯人读的笔记用自由 Markdown；要检索和跨文件问答，需要这个前缀。
+
 
 ## 分层
 
@@ -209,6 +209,4 @@ $ bm schema validate people/ada-lovelace.md
 ## 参考来源
 
 - [basic-memory/docs/NOTE-FORMAT.md](https://github.com/basicmachines-co/basic-memory/blob/main/docs/NOTE-FORMAT.md)
-- basic-memory 根目录 NOTE-FORMAT.md
-- `src/basic_memory/markdown/plugins.py`、`temporal_qualifier.py`、`src/basic_memory/picoschema/parser.py`
 - [Picoschema（Google Dotprompt）](https://google.github.io/dotprompt/reference/picoschema/)

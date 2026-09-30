@@ -6,7 +6,7 @@ categories: ai llm
 tags: reasoning llm api
 ---
 
-`reasoning_effort` 一个看起来标准化的参数。实际上同一句 `"reasoning_effort": "max"`——qwen3.8 把它映射成 `xhigh`，deepseek-v4-pro 原样收下，glm-5.1 直接报错，而deepseek-v4.1-flash 天差地别。结果只取决于你调的是具体模型
+`reasoning_effort` 一个看起来标准化的参数。实际上同一句 `"reasoning_effort": "max"`——qwen3.8 把它映射成 `xhigh`，deepseek-v4-pro 原样收下，glm-5.1 直接报错，而 deepseek-v4.1-flash 收下 `max` 的同时还多开了一个 `low` 档。结果只取决于你调的是具体模型
 
 
 
@@ -24,25 +24,24 @@ tags: reasoning llm api
 
 `reasoning_effort` 是推理模型 API 上控制思考深度的档位参数。各家文档里写法一样，语义却不通用：**取值是一张按模型划定的白名单，不是连续区间**。传了白名单外的值，平台有三种反应——透传、映射到最近的档、返回 `invalid_parameter_error`。走哪种，看模型，也看它是厂商直供还是云上托管
 
-### **2. 主线案例：一个 `max` 的五种下场**
+### **2. 主线案例：一个 `max` 的四种下场**
 
-全文用同一行参数贯穿：`"reasoning_effort": "max"`。它在百炼体系内会撞上五套互不兼容的处理逻辑
+全文用同一行参数贯穿：`"reasoning_effort": "max"`。它在百炼体系内会撞上四套互不兼容的处理逻辑
 
 | 目标模型 | `max` 是否在白名单 | 实际结果 |
 |---|---|---|
 | qwen3.8-max / flash | 否（白名单为 `xhigh` `medium` `low`） | 越界映射，静默变成 `xhigh` |
-| deepseek-v4-pro / flash | 是，顶档 | 原样生效 |
+| deepseek-v4-pro / v4-flash / v4.1-flash | 是，顶档 | 原样生效（v4.1-flash 另有 `low` 档） |
 | ZHIPU/GLM-5.3 | 是，顶档且为默认值 | 原样生效 |
 | glm-5.1 / glm-5 | 否，且不做兜底 | `invalid_parameter_error` |
-| deepseek-v4.1-flash | 不适用 | effort 是 1–100 整数，枚举形态本身不匹配 |
 
-同一个字符串，四种结局：被改写、被接受、被拒绝、形态不符。文档没写错，是这个参数在每家的实现层级本来就不一样
+同一个字符串，三种结局：被改写、被接受、被拒绝。文档没写错，是这个参数在每家的实现层级本来就不一样
 
 ### **3. 三层结构：白名单、越界处理、预算**
 
 行为分三层，从上往下逐层生效。混在一起看会觉得文档自相矛盾，拆开看就顺了。每一层都回答同一个问题：`max` 在这里被怎么处理
 
-1. **白名单层——决定你能传什么。** 每个模型先声明自己收哪些值：qwen3.8-max 只收 `xhigh` `medium` `low`，glm-5.1 收 `none` 到 `xhigh` 六档，ZHIPU/GLM-5.3 只收 `max` `high` `low`。任何一次调用都先过这层。`max` 在 deepseek-v4-pro 上通过、在 qwen3.8-max 上不通过，分岔就发生在这里
+1. **白名单层——决定你能传什么。** 每个模型先声明自己收哪些值：qwen3.8-max 只收 `xhigh` `medium` `low`，glm-5.1 收 `none` 到 `xhigh` 六档，ZHIPU/GLM-5.3 只收 `max` `high` `low`。任何一次调用都先过这层。`max` 在 deepseek-v4-pro、deepseek-v4.1-flash 上通过，在 qwen3.8-max 上不通过，分岔就发生在这里
 2. **越界处理层——决定传错了怎么办。** 百炼 GLM 页面自己写了一条警告：云上部署的三方开源模型和模型官方对超参数的处理逻辑不同，**官方做阈值校验、越界回退默认值，云上直接透传不校验**。同一个平台里，两类模型的容错方向是反的。`max` 传给 qwen3.8-max 被改写成 `xhigh`，传给 glm-5.1 报错，`glm-5.2` 是云上托管、接近裸透传
 3. **预算层——决定思考的上限。** effort 底下还压着硬预算：Qwen 是 `thinking_budget`（思考 token 上限），Claude 是 `task_budget`（长程 agent 的硬上限，模型能看见剩余倒计时、自己节流）。精确控成本、或跑多轮 agent 才会碰到这一层。这里有个坑：**qwen3.8 不允许 `reasoning_effort` 和 `thinking_budget` 同传**，一起发就报错
 
@@ -56,7 +55,7 @@ tags: reasoning llm api
 | qwen3.8-omni-flash | 思考默认开启 | `none` `minimal` `low` `medium` `high` `xhigh` `max` | 文档未列映射 | 同上 |
 | deepseek-v4-pro / deepseek-v4-flash | `high` | `high` `max` | `low`、`medium` → `high`；`xhigh` → `max` | `enable_thinking=false` |
 | deepseek-v4-flash-0731 / deepseek-v4-pro-0813 | `high` | `low` `high` `max` | `medium` → `high`；`xhigh` → `high` | `enable_thinking=false` |
-| deepseek-v4.1-flash | — | **1–100 整数** | 不走枚举体系 | — |
+| deepseek-v4.1-flash | `high` | `low` `high` `max` | `medium` → `high`；`xhigh` → `max` | `enable_thinking=false` |
 | glm-5.2 / glm-5.2-us / glm-5.2-fast-preview | 思考默认开启 | `none` `minimal` `low` `medium` `high` `xhigh` `max` | `low`、`medium` → `high`；`xhigh` → `max`；`none` → `reasoning_tokens = 0` | `enable_thinking=false`（优先级高于 effort） |
 | glm-5.1 / glm-5 | 思考默认开启 | `none` `minimal` `low` `medium` `high` `xhigh` | 同上，但不支持 `max` | `enable_thinking=false` |
 | ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash | `max` | `max` `high` `low` | 其余取值报错 | **不可关**，`enable_thinking=false` 直接失败 |
@@ -65,10 +64,11 @@ tags: reasoning llm api
 
 这张表里有三个结论。**档位是白名单不是区间**，传错就是错，没有中间态。**默认档普遍偏高**，Qwen3.8 默认 `xhigh`、GLM-5.3 默认 `max`、DeepSeek 默认 `high`，不显式传就按贵的那档计费。**同名不同义**，`high` 在 Qwen3.8 上等于 `xhigh`，在 DeepSeek 快照版上是真高档，在 GLM-5.2 上是三档合一的汇聚点
 
-另外两条踩过的：
+另外三条踩过的：
 
 - **qwen3.8 系列的 effort 与预算互斥**，两者可以互转：`low` = 4096、`medium` = 16384、`xhigh` = 262144；都不传时默认 `thinking_budget` 131072，也就是 `xhigh`
 - **GLM 系列有个 `clear_thinking` 参数**，控制多轮对话里历史 `reasoning_content` 要不要回灌上下文。默认 `false`（保留，即 Preserved Thinking），设 `true` 能明显压低 `prompt_tokens`。把"历史思考留不留"显式开放出来的，目前就这一家
+- **deepseek-v4.1-flash 是最容易看错的一行**：百炼 API 侧它走的是正常枚举，`max` 是合法顶档，默认 `high`。1–100 的连续 effort 只存在于开源权重的 prompt encoding 里，API 的三档对应标量 50 / 75 / 100。别把自部署刻度当成 API 取值
 
 ## **三、硬编码 vs 按模型查表**
 
@@ -130,7 +130,7 @@ o1 / o3 引入 `reasoning_effort`，取值 `low` `medium` `high`。行业第一�
 
 **国产阵营口径收敛而非统一。** GLM 从 5.2 的"可关 + 7 档"走到 5.3 的"强制思考 + 3 档"；Qwen 用 `thinking_budget` ↔ `effort` 双向映射做兼容层；百炼作为聚合平台，给同一个 `reasoning_effort` 字段按模型各配了一张映射表，越界即报错
 
-走到这一步，`max` 的五种下场就有了解释：白名单是各家长出来的，不是谁设计出来的
+走到这一步，`max` 的四种下场就有了解释：白名单是各家长出来的，不是谁设计出来的
 
 ## **六、一次按模型查表的档位下发**
 

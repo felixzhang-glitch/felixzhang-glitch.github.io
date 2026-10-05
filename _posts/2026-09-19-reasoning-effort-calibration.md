@@ -32,7 +32,7 @@ tags: reasoning llm api
 |---|---|---|
 | qwen3.8-max / flash | 否（白名单为 `xhigh` `medium` `low`） | 越界映射，静默变成 `xhigh` |
 | deepseek-v4-pro / v4-flash / v4.1-flash | 是，顶档 | 原样生效（v4.1-flash 另有 `low` 档） |
-| ZHIPU/GLM-5.3 | 是，顶档且为默认值 | 原样生效 |
+| glm-5.3（百炼托管）/ ZHIPU/GLM-5.3 | 是，顶档 | 原样生效（直供版默认即 `max`；托管版默认档文档未标注） |
 | glm-5.1 / glm-5 | 否，且不做兜底 | `invalid_parameter_error` |
 
 同一个字符串，三种结局：被改写、被接受、被拒绝。文档没写错，是这个参数在每家的实现层级本来就不一样
@@ -41,8 +41,8 @@ tags: reasoning llm api
 
 行为分三层，从上往下逐层生效。混在一起看会觉得文档自相矛盾，拆开看就顺了。每一层都回答同一个问题：`max` 在这里被怎么处理
 
-1. **白名单层——决定你能传什么。** 每个模型先声明自己收哪些值：qwen3.8-max 只收 `xhigh` `medium` `low`，glm-5.1 收 `none` 到 `xhigh` 六档，ZHIPU/GLM-5.3 只收 `max` `high` `low`。任何一次调用都先过这层。`max` 在 deepseek-v4-pro、deepseek-v4.1-flash 上通过，在 qwen3.8-max 上不通过，分岔就发生在这里
-2. **越界处理层——决定传错了怎么办。** 百炼 GLM 页面自己写了一条警告：云上部署的三方开源模型和模型官方对超参数的处理逻辑不同，**官方做阈值校验、越界回退默认值，云上直接透传不校验**。同一个平台里，两类模型的容错方向是反的。`max` 传给 qwen3.8-max 被改写成 `xhigh`，传给 glm-5.1 报错，`glm-5.2` 是云上托管、接近裸透传
+1. **白名单层——决定你能传什么。** 每个模型先声明自己收哪些值：qwen3.8-max 只收 `xhigh` `medium` `low`，glm-5.1 收 `none` 到 `xhigh` 六档，glm-5.3 不论百炼托管还是 ZHIPU 直供都只收 `max` `high` `low`。任何一次调用都先过这层。`max` 在 deepseek-v4-pro、deepseek-v4.1-flash 上通过，在 qwen3.8-max 上不通过，分岔就发生在这里
+2. **越界处理层——决定传错了怎么办。** 百炼 GLM 页面自己写了一条警告：云上部署的三方开源模型和模型官方对超参数的处理逻辑不同，**官方做阈值校验、越界回退默认值，云上直接透传不校验**。同一个平台里，两类模型的容错方向是反的。`max` 传给 qwen3.8-max 被改写成 `xhigh`，传给 glm-5.1 报错，`glm-5.2` 是云上托管、接近裸透传。但"云上 = 透传"只对采样超参数成立：新上的托管版 glm-5.3 对 effort 白名单照样硬校验，越界直接 `invalid_parameter_error`
 3. **预算层——决定思考的上限。** effort 底下还压着硬预算：Qwen 是 `thinking_budget`（思考 token 上限），Claude 是 `task_budget`（长程 agent 的硬上限，模型能看见剩余倒计时、自己节流）。精确控成本、或跑多轮 agent 才会碰到这一层。这里有个坑：**qwen3.8 不允许 `reasoning_effort` 和 `thinking_budget` 同传**，一起发就报错
 
 三层还在变：上层粗调，下层硬约束，中间怎么衔接各家自己定
@@ -56,9 +56,10 @@ tags: reasoning llm api
 | deepseek-v4-pro / deepseek-v4-flash | `high` | `high` `max` | `low`、`medium` → `high`；`xhigh` → `max` | `enable_thinking=false` |
 | deepseek-v4-flash-0731 / deepseek-v4-pro-0813 | `high` | `low` `high` `max` | `medium` → `high`；`xhigh` → `high` | `enable_thinking=false` |
 | deepseek-v4.1-flash | `high` | `low` `high` `max` | `medium` → `high`；`xhigh` → `max` | `enable_thinking=false` |
+| glm-5.3（百炼托管，新上） | 文档未标注（思考强制开启） | `low` `high` `max` | 其余取值 `invalid_parameter_error` | **不可关**，`enable_thinking=false` 静默无效 |
 | glm-5.2 / glm-5.2-us / glm-5.2-fast-preview | 思考默认开启 | `none` `minimal` `low` `medium` `high` `xhigh` `max` | `low`、`medium` → `high`；`xhigh` → `max`；`none` → `reasoning_tokens = 0` | `enable_thinking=false`（优先级高于 effort） |
 | glm-5.1 / glm-5 | 思考默认开启 | `none` `minimal` `low` `medium` `high` `xhigh` | 同上，但不支持 `max` | `enable_thinking=false` |
-| ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash | `max` | `max` `high` `low` | 其余取值报错 | **不可关**，`enable_thinking=false` 直接失败 |
+| ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash（直供） | `max` | `max` `high` `low` | 其余取值报错 | **不可关**，传 `disabled` / `enable_thinking=false` 请求直接失败 |
 | kimi-k3（阿里云直供） | `max` | `max` `high` `low` | — | — |
 | kimi/kimi-k3（月之暗面直供） | — | 仅 `max` | — | — |
 
@@ -67,7 +68,7 @@ tags: reasoning llm api
 另外三条踩过的：
 
 - **qwen3.8 系列的 effort 与预算互斥**，两者可以互转：`low` = 4096、`medium` = 16384、`xhigh` = 262144；都不传时默认 `thinking_budget` 131072，也就是 `xhigh`
-- **GLM 系列有个 `clear_thinking` 参数**，控制多轮对话里历史 `reasoning_content` 要不要回灌上下文。默认 `false`（保留，即 Preserved Thinking），设 `true` 能明显压低 `prompt_tokens`。把"历史思考留不留"显式开放出来的，目前就这一家
+- **GLM 系列有个 `clear_thinking` 参数**，控制多轮对话里历史 `reasoning_content` 要不要回灌上下文。GLM 多数模型默认 `false`（保留，即 Preserved Thinking），设 `true` 能明显压低 `prompt_tokens`；但托管版 glm-5.3 把默认值反转成了 `true`——历史思考默认不回灌，想要 Preserved Thinking 得显式关掉。同一个参数在同一系列里默认值相反，查表时别只看系列名。把"历史思考留不留"显式开放出来的，目前就这一家
 - **deepseek-v4.1-flash 是最容易看错的一行**：百炼 API 侧它走的是正常枚举，`max` 是合法顶档，默认 `high`。1–100 的连续 effort 只存在于开源权重的 prompt encoding 里，API 的三档对应标量 50 / 75 / 100。别把自部署刻度当成 API 取值
 
 ## **三、硬编码 vs 按模型查表**
@@ -91,7 +92,7 @@ tags: reasoning llm api
 |---|---|---|---|
 | OpenAI | `reasoning_effort = "none"` | 可以 | GPT-5.1 默认值就是 `none`；GPT-5.6 在 Chat Completions 下带 `tools` 时必须显式设为 `none`，否则默认 `medium` 直接报错 |
 | Claude | `thinking.type = "disabled"` | **受 effort 限制** | Opus 5 仅在 effort ≤ `high` 时允许关闭；Fable 5 完全不可关。4.7 起手动 extended thinking 已移除，传 `budget_tokens` 直接 400 |
-| 智谱 GLM | 5.2：`thinking.type = "disabled"`；5.3：不可关 | 5.2 可关，5.3 强制 | 从 5.2 迁到 5.3 若沿用 `disabled`，请求直接失败 |
+| 智谱 GLM | 5.2：`thinking.type = "disabled"`；5.3：不可关 | 5.2 可关，5.3 强制 | 从 5.2 迁到 5.3 若沿用 `disabled`，直供版请求直接失败；百炼托管版传 `enable_thinking=false` 不报错、静默无效，更难发现 |
 | 百炼 DeepSeek | `enable_thinking = false` | 可以 | 思考内容通过 `reasoning_content` 返回 |
 | 百炼 Qwen | `enable_thinking = false` 或 `effort = "none"` | 可以 | qwen3.8 下 `effort` 与 `thinking_budget` 互斥 |
 | 火山引擎豆包 | `thinking: "disabled"` | 可以，但不能叠加 effort | 已设 `disabled` 后再传 `low`～`max` 会返回 400；只有支持 `none` 的模型才可显式设 `none` |
@@ -189,6 +190,8 @@ max ∉ allowed，on_out_of_range = reject
 ## 参考文档
 
 - [百炼：深度思考模型的用法](https://help.aliyun.com/zh/model-studio/deep-thinking) — GLM、Qwen3.8、DeepSeek、kimi-k3 各模型页的档位与越界映射
+- [百炼：GLM 调用文档](https://help.aliyun.com/zh/model-studio/glm)、[glm-5.3 模型页](https://help.aliyun.com/zh/model-studio/glm-5-3) — 托管版 glm-5.3 三档白名单、思考不可关（`enable_thinking=false` 静默无效）、`clear_thinking` 默认 `true`
+- [百炼：GLM-智谱直供](https://help.aliyun.com/zh/model-studio/glm-zhipu) — ZHIPU/GLM-5.3 默认 `max`、传 `disabled` 请求失败
 - [百炼：文本生成模型 API 参考](https://help.aliyun.com/zh/model-studio/qwen-api-reference/) — `reasoning_effort` / `thinking_budget` / `enable_thinking` / `clear_thinking` 字段说明
 - [OpenAI：Reasoning models](https://developers.openai.com/api/docs/guides/reasoning) — effort 取值与 `none` 语义
 - [Azure OpenAI：推理模型](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning) — 可取值列表与场景对照表

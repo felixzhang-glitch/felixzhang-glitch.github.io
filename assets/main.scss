@@ -104,7 +104,6 @@ hr {
 }
 
 .site-title { color: var(--fg); font-weight: 700; }
-.site-title::before { content: "~/"; color: var(--fg-faint); font-weight: 400; }
 
 .site-nav a, .site-nav .page-link { color: var(--fg-muted); font-size: 13px; }
 .site-nav a:hover, .site-nav .page-link:hover { color: var(--accent); }
@@ -153,21 +152,7 @@ hr {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-soft);
 }
-.post-content h2::before {
-  content: "##";
-  margin-right: 9px;
-  color: var(--marker);
-  font-weight: 400;
-}
-
 .post-content h3 { font-size: 16px; font-weight: 700; margin-top: 24px; margin-bottom: 10px; }
-.post-content h3::before {
-  content: "###";
-  margin-right: 9px;
-  color: var(--marker);
-  font-weight: 400;
-}
-
 .post-content h4 {
   font-size: 14.5px;
   font-weight: 700;
@@ -175,13 +160,6 @@ hr {
   margin-bottom: 8px;
   color: var(--fg-muted);
 }
-.post-content h4::before {
-  content: "####";
-  margin-right: 9px;
-  color: var(--marker);
-  font-weight: 400;
-}
-
 .post-content h2 strong,
 .post-content h3 strong,
 .post-content h4 strong { font-weight: 700; }
@@ -194,7 +172,6 @@ hr {
   color: var(--fg-faint);
   letter-spacing: 0;
 }
-.post-meta::before { content: "# "; color: var(--marker); }
 
 .post-header { margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-soft); }
 .post-header .post-meta { margin-bottom: 0; }
@@ -368,7 +345,6 @@ div.highlighter-rouge pre::-webkit-scrollbar-thumb {
   color: var(--fg-muted);
   margin-bottom: 7px;
 }
-.post-list > li .post-meta::before { content: ""; margin: 0; }
 
 .post-list > li h3 { margin: 0 0 5px 0; font-size: 17px; }
 .post-list > li h3 a { font-family: var(--mono); font-weight: 700; color: var(--fg); letter-spacing: -0.01em; }
@@ -383,7 +359,6 @@ div.highlighter-rouge pre::-webkit-scrollbar-thumb {
   padding-bottom: 8px;
   margin-top: 0;
 }
-.post-list-heading::before { content: "$ ls posts/"; }
 
 .post-list > li > p {
   margin-bottom: 0;
@@ -433,7 +408,6 @@ a.pagination-item:hover { text-decoration: underline; }
   font-size: 14px;
   color: var(--fg);
 }
-.term-name::before { content: "#"; color: var(--marker); margin-right: 3px; }
 
 .term-count {
   display: inline-block;
@@ -457,7 +431,6 @@ a.pagination-item:hover { text-decoration: underline; }
 .term-posts li { margin-bottom: 3px; font-size: 14px; }
 .term-posts a { font-family: var(--mono); }
 .term-posts .post-meta { font-size: 11.5px; }
-.term-posts .post-meta::before { content: ""; margin: 0; }
 
 /* ---------- RSS ---------- */
 

@@ -163,13 +163,14 @@ max ∉ allowed，on_out_of_range = reject
 
 ## 参考文档
 
-- 百炼：深度思考模型的用法 — GLM、Qwen3.8、DeepSeek、kimi-k3 各模型页档位与越界映射
-- 百炼：GLM 调用文档、glm-5.3 模型页 — glm-5.3 三档、不可关、`clear_thinking` 默认 `true`
-- 百炼：GLM-智谱直供 — ZHIPU/GLM-5.3 默认 `max`、传 `disabled` 失败
-- 百炼：文本生成模型 API 参考 — 字段说明
-- OpenAI：Reasoning models — effort 取值与 `none`
-- Azure OpenAI：推理模型 — 可取值与场景
-- Claude：Effort、Claude：Extended thinking — adaptive thinking 与 `task_budget`
-- DeepSeek：思考模式 — 三档定义
-- 智谱：深度思考、智谱：GLM-5.3 模型页 — 5.2 可关、5.3 强制
-- 火山方舟：深度思考 — `thinking` 与 effort 叠加限制
+- [百炼：深度思考模型的用法](https://help.aliyun.com/zh/model-studio/deep-thinking) — GLM、Qwen3.8、DeepSeek、kimi-k3 各模型页档位与越界映射
+- [百炼：GLM 调用文档](https://help.aliyun.com/zh/model-studio/glm)、[glm-5.3 模型页](https://help.aliyun.com/zh/model-studio/glm-5-3) — glm-5.3 三档、不可关、`clear_thinking` 默认 `true`
+- [百炼：GLM-智谱直供](https://help.aliyun.com/zh/model-studio/glm-zhipu) — ZHIPU/GLM-5.3 默认 `max`、传 `disabled` 失败
+- [百炼：文本生成模型 API 参考](https://help.aliyun.com/zh/model-studio/qwen-api-reference/) — 字段说明
+- [OpenAI：Reasoning models](https://developers.openai.com/api/docs/guides/reasoning) — effort 取值与 `none`
+- [Azure OpenAI：推理模型](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning) — 可取值与场景
+- [Claude：Effort](https://platform.claude.com/docs/en/build-with-claude/effort)、[Claude：Extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking) — adaptive thinking 与 `task_budget`
+- [DeepSeek：思考模式](https://api-docs.deepseek.com/zh-cn/guides/thinking_mode/) — 三档定义
+- [智谱：深度思考](https://docs.bigmodel.cn/cn/guide/capabilities/thinking)、[智谱：GLM-5.3 模型页](https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3) — 5.2 可关、5.3 强制
+- [火山方舟：深度思考](https://www.volcengine.com/docs/82379/1956279) — `thinking` 与 effort 叠加限制
+- DeepSeek V4.1 官方技术报告 — effort 标量、长度惩罚衰减、Pass@1 与 token 代价，无公开稳定 URL，未附链接

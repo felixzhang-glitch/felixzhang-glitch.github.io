@@ -173,4 +173,4 @@ max ∉ allowed，on_out_of_range = reject
 - [DeepSeek：思考模式](https://api-docs.deepseek.com/zh-cn/guides/thinking_mode/) — 三档定义
 - [智谱：深度思考](https://docs.bigmodel.cn/cn/guide/capabilities/thinking)、[智谱：GLM-5.3 模型页](https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3) — 5.2 可关、5.3 强制
 - [火山方舟：深度思考](https://www.volcengine.com/docs/82379/1956279) — `thinking` 与 effort 叠加限制
-- DeepSeek V4.1 官方技术报告 — effort 标量、长度惩罚衰减、Pass@1 与 token 代价，无公开稳定 URL，未附链接
+- [DeepSeek V4.1 技术报告](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/DeepSeek_V41_Tech_Report.pdf) — effort 标量、长度惩罚衰减、Pass@1 与 token 代价

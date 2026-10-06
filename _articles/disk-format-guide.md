@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "磁盘格式与 U 盘文件系统选择指南"
-date: 2026-10-06
+title: 磁盘格式与 U 盘文件系统选择指南
+date: 2024-10-06
 categories: tech
 tags: disk filesystem exfat fat32 ntfs apfs
 permalink: /tech/2026/10/06/disk-format-guide.html

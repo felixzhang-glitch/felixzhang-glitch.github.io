@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "一个 IP 挂多个域名：Nginx 反向代理配置"
-date: 2026-09-25
+title: 一个 IP 挂多个域名：Nginx 反向代理配置
+date: 2025-09-25
 categories: ops nginx
 tags: nginx reverse-proxy websocket devops
 permalink: /ops/nginx/2026/09/25/nginx-multi-domain-reverse-proxy.html

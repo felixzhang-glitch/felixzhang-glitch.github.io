@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Agent Skills 渐进式披露：从单条 SQL 到多步自主分析"
+title: Agent Skills 的一次工程实践
 date: 2026-09-19 06:00:00 +0000
 categories: ai agent
 tags: agent skills agentscope nl2sql

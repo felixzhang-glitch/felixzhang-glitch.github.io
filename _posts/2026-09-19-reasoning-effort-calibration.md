@@ -6,7 +6,7 @@ categories: ai llm
 tags: reasoning llm api
 ---
 
-`reasoning_effort`      描述推理强度的一个参数, 但是并不标准,  同一个key, 不一样的value, 不尽相同的实现,有的匹配生效, 有的映射转换、还有的直接报错。
+`reasoning_effort`：描述推理强度的参数，但并不标准。同一个 key，不一样的 value，不尽相同的实现：有的匹配生效，有的映射转换，还有的直接报错
 
 ## 一、reasoning_effort 是什么
 
@@ -20,7 +20,7 @@ tags: reasoning llm api
 }
 ```
 
-同一个name, value是各模型厂家自己实现的白名单。常见三种处理是：透传、映射最近档、或者是直接`invalid_parameter_error`。
+同一个 name，value 是各模型厂商自己的白名单。常见三种处理：透传、映射最近档、直接 `invalid_parameter_error`
 
 ### 2. 一个 `max` 的四种实现
 
@@ -52,6 +52,7 @@ tags: reasoning llm api
 | ZHIPU/GLM-5.3 / ZHIPU/GLM-5.3-Flash | `max` | `max` `high` `low` | 其余报错 | **不可关**，传 `disabled`/`enable_thinking=false` 请求失败 |
 | kimi-k3 | `max` | `max` `high` `low` | — | — |
 | kimi/kimi-k3 | — | 仅 `max` | — | — |
+
 - 档位是白名单不是区间，传错就是错
 - 默认档普遍偏高，常见的default基本都是最高档
 - 同名不同义：`high` 在 Qwen3.8 等于 `xhigh`，在 DeepSeek 快照是真高档，在 GLM-5.2 却只是三档汇聚点

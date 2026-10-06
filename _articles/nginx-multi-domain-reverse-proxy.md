@@ -7,7 +7,6 @@ tags: nginx reverse-proxy websocket devops
 permalink: /ops/nginx/2026/09/25/nginx-multi-domain-reverse-proxy.html
 ---
 
-## 简述
 
 多个域名解析到同一个 IP，Nginx 按请求头里的 `Host` 区分目标域名，转发到对应后端。一台机器、一个 Nginx、多个 `server` 块。
 

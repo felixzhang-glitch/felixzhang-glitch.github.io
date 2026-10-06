@@ -7,7 +7,6 @@ tags: basic-memory knowledge-base mcp picoschema
 permalink: /knowledge/markdown/2026/09/27/note-format.html
 ---
 
-## 简述
 
 NOTE-FORMAT 是 basic-memory 对笔记文件的语法约定。不扩展 Markdown，只约定列表项里的括号写法，让同一份文件既能给人读，也能解析成知识图谱。文件是真源，数据库里的图是文件的投影，文件改动后同步更新。
 

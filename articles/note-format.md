@@ -4,6 +4,7 @@ title: "NOTE-FORMAT：basic-memory"
 date: 2026-09-27
 categories: knowledge markdown
 tags: basic-memory knowledge-base mcp picoschema
+permalink: /knowledge/markdown/2026/09/27/note-format.html
 ---
 
 ## 简述

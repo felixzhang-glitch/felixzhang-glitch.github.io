@@ -9,9 +9,16 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
-# 分页：GitHub Pages 默认启用 jekyll-paginate，无需在 plugins 中声明
-paginate: 6
-paginate_path: "/page:num/"
+# 文章改用自定义 collection，文件名无需日期前缀
+collections:
+  articles:
+    output: true
+    permalink: /:name/
+
+# jekyll-feed 默认只收录 posts，这里让它收录 articles
+feed:
+  collections:
+    - articles
 
 # 首页列表显示摘要
 show_excerpts: true

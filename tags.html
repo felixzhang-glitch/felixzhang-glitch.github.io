@@ -4,16 +4,21 @@ title: 标签
 permalink: /tags/
 ---
 
-{%- assign terms = site.tags | sort -%}
+{%- assign all_terms = "" | split: "" -%}
+{%- for post in site.articles -%}
+  {%- assign all_terms = all_terms | concat: post.tags -%}
+{%- endfor -%}
+{%- assign terms = all_terms | uniq | sort -%}
 
 {%- if terms.size > 0 -%}
 <ul class="term-list">
   {%- for term in terms -%}
+  {%- assign term_posts = site.articles | where_exp: "p", "p.tags contains term" | sort: "date" | reverse -%}
   <li>
-    <span class="term-name">{{ term[0] }}</span>
-    <span class="term-count">{{ term[1].size }}</span>
+    <span class="term-name">{{ term }}</span>
+    <span class="term-count">{{ term_posts.size }}</span>
     <ul class="term-posts">
-      {%- for post in term[1] -%}
+      {%- for post in term_posts -%}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <span class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</span>

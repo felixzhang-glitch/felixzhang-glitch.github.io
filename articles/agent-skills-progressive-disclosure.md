@@ -4,6 +4,7 @@ title: "Agent Skills 渐进式披露：从单条 SQL 到多步自主分析"
 date: 2026-09-19 06:00:00 +0000
 categories: ai agent
 tags: agent skills agentscope nl2sql
+permalink: /ai/agent/2026/09/19/agent-skills-progressive-disclosure.html
 ---
 
 Agent Skills 是由指令、脚本和资源组成的模块化能力包，靠三层渐进式披露控制上下文加载。本文以 MySQL employees 库的自然语言数据分析为例，对比传统固定工作流与 Skills 方案的差别，并说明如何与 AgentScope 框架集成

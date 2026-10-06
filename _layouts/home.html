@@ -9,7 +9,7 @@ layout: default
 
   {{ content }}
 
-  {%- assign posts = paginator.posts | default: site.posts -%}
+  {%- assign posts = site.articles | sort: "date" | reverse -%}
   {%- if posts.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
     <ul class="post-list">
@@ -29,24 +29,6 @@ layout: default
       {%- endfor -%}
     </ul>
 
-    {%- if paginator and paginator.total_pages > 1 -%}
-    <nav class="pagination" aria-label="分页导航">
-      {%- if paginator.previous_page -%}
-        <a class="pagination-item" href="{{ paginator.previous_page_path | relative_url }}">&larr; 更新</a>
-      {%- else -%}
-        <span class="pagination-item is-disabled">&larr; 更新</span>
-      {%- endif -%}
-
-      <span class="pagination-item pagination-count">第 {{ paginator.page }} / {{ paginator.total_pages }} 页</span>
-
-      {%- if paginator.next_page -%}
-        <a class="pagination-item" href="{{ paginator.next_page_path | relative_url }}">更早 &rarr;</a>
-      {%- else -%}
-        <span class="pagination-item is-disabled">更早 &rarr;</span>
-      {%- endif -%}
-    </nav>
-    {%- endif -%}
-
-    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+    <p class="rss-subscribe">subscribe <a href="{{ "/feed/articles.xml" | relative_url }}">via RSS</a></p>
   {%- endif -%}
 </div>

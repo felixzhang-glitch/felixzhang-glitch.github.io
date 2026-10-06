@@ -4,6 +4,7 @@ title: "reasoning_effort 的分裂与统一"
 date: 2026-09-19
 categories: ai llm
 tags: reasoning llm api
+permalink: /ai/llm/2026/09/19/reasoning-effort-calibration.html
 ---
 
 `reasoning_effort`：描述推理强度的参数，但并不标准。同一个 key，不一样的 value，不尽相同的实现：有的匹配生效，有的映射转换，还有的直接报错

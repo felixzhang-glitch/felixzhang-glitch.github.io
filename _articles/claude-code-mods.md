@@ -190,24 +190,24 @@ for (const surface of ['terminal', 'desktop', 'vscode', 'mobile'] as const) {
 
 ## **五、运行与边界**
 
-hooks 和界面不是同一套覆盖范围。hooks 跟着插件走，只有不支持插件的地方不跑；界面范围更窄，只有三端画得出来
+hooks 和界面不是同一套覆盖范围。hooks 跟着插件走，只有不支持插件的地方不加载；界面范围更窄，只有三端有渲染
 
-| 运行 | hooks 跑不跑 | 画的东西出不出现 |
+| 运行 | hooks 是否加载 | 界面是否生效 |
 | --- | --- | --- |
-| 终端里的 `claude`（含编辑器内置终端、JetBrains 插件） | 跑 | 出现 |
-| Desktop App 的 Code 标签页（WSL 会话除外） | 跑 | 出现，terminal-only 元素除外 |
-| Desktop 里的 WSL 会话 | 不跑（WSL 不支持插件） | 不出现 |
-| VS Code 扩展的 chat 面板 | 跑 | 出现，扩展 ≥ 2.1.299（不拉 feature flag 的会话要 2.1.304） |
-| `claude -p` 与 Agent SDK | 跑 | 不出现 |
+| 终端里的 `claude`（含编辑器内置终端、JetBrains 插件） | 加载 | 生效 |
+| Desktop App 的 Code 标签页（WSL 会话除外） | 加载 | 生效，terminal-only 元素除外 |
+| Desktop 里的 WSL 会话 | 不加载（WSL 不支持插件） | 不生效 |
+| VS Code 扩展的 chat 面板 | 加载 | 生效，扩展 ≥ 2.1.299（不拉 feature flag 的会话要 2.1.304） |
+| `claude -p` 与 Agent SDK | 加载 | 不生效 |
 
 版本是另一道门槛：终端 ≥ **2.1.287**，Desktop 自带的 Claude Code ≥ **2.1.286**。开关分三层——单个 mod 在 `/plugin` 里禁用，整场用 `--safe-mode`，全禁用用 `disableAllHooks`，内置 mod 不受这三类影响
 
 本机核对：
 
-| 位置 | 实测 | 能不能画 |
+| 位置 | 实测 | 界面是否生效 |
 | --- | --- | --- |
-| 终端 | `claude --version` → `2.1.292 (Claude Code)` | 能 |
-| VS Code 扩展 | `~/.vscode/extensions/anthropic.claude-code-2.1.277-darwin-arm64` | 不能（低于 2.1.299） |
+| 终端 | `claude --version` → `2.1.292 (Claude Code)` | 生效 |
+| VS Code 扩展 | `~/.vscode/extensions/anthropic.claude-code-2.1.277-darwin-arm64` | 不生效（低于 2.1.299） |
 | Claude Desktop | 未安装 | — |
 
 结论：官方支持三端绘制，这台机器只有终端够门槛

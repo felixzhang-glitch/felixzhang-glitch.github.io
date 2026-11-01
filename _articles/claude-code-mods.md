@@ -249,6 +249,10 @@ mod 是跑在你权限下、进程内的代码。官方的清单：
 
 ## **八、和 DeepSeek Harness 的对照**
 
+官方在 v0.2.1-alpha.1 的 release notes 里加了一条：新增实验性 Claude Code Mods 兼容层。目的写得直白——目前阶段是验证 Claude Code Mods 的 API 能力大致是 DeepSeek Harness 插件的一个子集，不是给用户提供完整兼容性
+
+![DSH v0.2.1-alpha.1：新增实验性 Claude Code Mods 兼容层](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/9e931266bb9a2c71957f2d5b38a76454.jpg)
+
 Claude Code：mods 是插件的子集，建在它自己的 hooks/skill/MCP 体系上，先解决界面能不能改。
 
 DeepSeek Harness：模型、工具、技能、会话、沙箱、文件系统、循环、编排、UI 全部是插件，可以混搭替换。崔添翼的回应：
@@ -256,6 +260,14 @@ DeepSeek Harness：模型、工具、技能、会话、沙箱、文件系统、�
 > 做这个兼容层的主要目的，是验证 Claude Code Mods 向插件作者提供的扩展能力，是否大致是 DSH"一切皆插件"架构所提供能力的一个子集。
 
 ![DSH 与 Claude Code Mods 的对照](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/937a5809869d0b3898cddf5ccf812967.jpg)
+
+Harness 是 DSH 的设置层，管本地能力声明：skills、MCP server、hooks、AGENTS.md。MCP 与 hook 桥可以启停，skill 可以单独停用，AGENTS.md 直接编辑，本机 31 个 skill 全在这一个面板里
+
+![Harness 设置：统一管理 skills、MCP、hooks 与 AGENTS.md](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/d92fb729df7ad27ce63d6bb489f3a799.jpg)
+
+token use 是 DSH 的用量统计，把 token、工具调用、会话记进同一本账：按天 token 趋势、缓存命中率、活跃热力图、按模型拆分。主 agent 和子 agent 的消耗可以直接对比，不用去翻会话日志
+
+![用量统计：token、工具调用、会话与主/子 agent 对比](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/8d7bdc979aa31f7ae16978c4847cb988.jpg)
 
 万物皆插件的场景下可定制面更大：Claude Code 的 mod 只能在留出的渲染点上改，DSH 里连模型、循环、沙箱都是可替换的插件。代价直白——可玩性越高，审代码成本越高，mod 又完全不沙箱
 

@@ -7,7 +7,7 @@ tags: claude-code mods plugin
 permalink: /ai/agent/2026/11/01/claude-code-mods.html
 ---
 
-mod 是 Claude Code 的一层扩展点：插件里写 JavaScript/TypeScript 函数，挂在事件上，就能改工具调用、改 prompt、画界面。本文用一个 demo-mod（统计工具调用次数、显示在 spinner 旁）贯穿，对比 mod 与 settings hook、skill、MCP 的差别，最后落到安全边界和 DeepSeek Harness 的对照
+mod 是 Claude Code 的一层扩展点。在事件覆盖上，它也是 settings hook 的超集：settings hook 的每个事件都以 `classic.<Event>` 形式暴露给 mod。但两者共存非替代——mod 放行后，settings 文件里的 hook 仍会执行
 
 ## **一、mod 是什么**
 
@@ -18,8 +18,6 @@ A mod is a plugin that changes how Claude Code looks and behaves. It's made of J
 ```
 
 mod 是一个**插件**，由 **JS/TS 事件处理器**组成。事件发生（工具调用、提交 prompt、界面绘制）时，Claude Code 调起对应的 handler，handler 可以观察、改写、或者直接接管这件事
-
-关键区分点在于 handler 跑在哪。settings 里的 hooks 也是事件触发，但那是**进程外**的 shell 命令 / HTTP 请求；mod 的 handler 是**进程内**函数。文档把两种都叫 "hook"——"hook" 指 mod 的 handler，settings 里那种叫 "settings hook"
 
 ![mod 的定义](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/d68d31b2509fc4f68af42e22e87bccfe.jpg)
 
@@ -219,7 +217,7 @@ hooks 和界面不是同一套覆盖范围。hooks 跟着插件走，只有不�
 ![服务器上的 flightdeck：右侧四块 pane 全部由 mod 绘制](https://public-files-dev.oss-cn-hangzhou.aliyuncs.com/images/31cbd6db95bb91ef43ec71a446085657.jpg)
 *服务器上的 flightdeck：右侧四块 pane 全部由 mod 绘制*
 
-仓库：https://github.com/scasella/claude-flightdeck
+参考范例：https://github.com/scasella/claude-flightdeck
 
 日常功能本身就是 mod，`/plugin` 的 Installed 页 Built-in 分组下能看到：
 
